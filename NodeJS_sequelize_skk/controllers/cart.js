@@ -102,6 +102,9 @@ exports.cartDeleteProduct = (req, res, next) => {
     .then(cart => {
       if(!cart){
         res.status(400).json({message:"Cart Not Found"});
+        const error = new Error('Cart not Created yet');
+        error.statusCode = 401;
+        throw error;
       }
       return cart.getProducts({ where: { id: prodId } });
     })
@@ -109,6 +112,9 @@ exports.cartDeleteProduct = (req, res, next) => {
       const product = products[0];
       if(!product){
         res.status(400).json({message:"Product Not Found"});
+        const error = new Error('Product not Created yet');
+        error.statusCode = 401;
+        throw error;
       }
       return product.cartItem.destroy();
     })
