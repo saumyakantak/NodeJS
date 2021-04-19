@@ -18,6 +18,12 @@ exports.postOrder = (req, res, next) => {
         usr=user;
         user.getCart()
         .then(cart => {
+            if(!cart){
+              res.status(400).json({ message:"No Orders Yet"});
+              const error = new Error('Cart not Created yet');
+              error.statusCode = 401;
+              throw error;
+            }
             fetchedCart = cart;
             return cart.getProducts();
           })
@@ -58,6 +64,12 @@ exports.postOrder = (req, res, next) => {
     .then(user=>{
         user.getOrders({include: ['products']})
         .then(orders => {
+            if(!orders){
+              res.status(400).json({ message:"No Orders Yet"});
+              const error = new Error('Cart not Created yet');
+              error.statusCode = 401;
+              throw error;
+            }
             res.status(200).json({ message:"Order Fetched", order:orders });
         })
         .catch(err => console.log(err));
